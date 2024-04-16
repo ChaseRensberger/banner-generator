@@ -1,0 +1,17 @@
+{
+  "name": "banner-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "convert-svg-to-jpeg": "^0.6.4",
+    "sharp": "^0.33.3",
+    "text-to-svg": "^3.1.5"
+  }
+}
