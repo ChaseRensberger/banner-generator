@@ -1,6 +1,11 @@
 import sharp from "sharp";
 import TextToSVG from "text-to-svg";
 import SVGToJpeg from "convert-svg-to-jpeg";
+import AWS from "aws-sdk";
+import fs from "fs";
+
+const readFile = promisify(fs.readFile);
+const s3 = new AWS.S3();
 
 async function addTextToImage(
   imagePath,
@@ -42,6 +47,19 @@ async function addTextToImage(
       .toFile(outputPath);
 
     console.log("Image saved with text:", outputPath);
+    // Read the output file into a buffer
+    const fileContent = await readFile(outputPath);
+
+    // Upload the buffer to S3
+    const params = {
+      Bucket: "lukej-banners", // replace with your bucket name
+      Key: `thumbnail`, // replace with the desired object key
+      Body: fileContent,
+    };
+
+    await s3.upload(params).promise();
+
+    console.log("Image uploaded to S3");
   } catch (error) {
     console.error("Error adding text to image:", error);
   }
@@ -58,7 +76,7 @@ export const handler = async (event) => {
 
   const response = {
     statusCode: 200,
-    body: JSON.stringify("Hello from Lambda!"),
+    body: JSON.stringify({ message: "Image created with text (i think)" }),
   };
   return response;
 };
