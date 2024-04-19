@@ -32,11 +32,11 @@ async function addTextToImage(
     const progressBarJpeg = await SVGToJpeg.convert(progressBarSVG);
     const result = await image
       .composite([
-        { input: Buffer.from(progressBarJpeg), top: 750, left: 550 },
+        { input: Buffer.from(progressBarJpeg), top: 700, left: 582 },
         {
           input: Buffer.from(svgText),
-          top: 900,
-          left: 825,
+          top: 800,
+          left: 860,
         },
       ])
       .toFile(outputPath);
@@ -48,8 +48,6 @@ async function addTextToImage(
 }
 
 export const handler = async (event) => {
-
-  console.log(event);
 
   const imagePath = "banner.jpeg";
   const outputPath = "output-image.jpg";
