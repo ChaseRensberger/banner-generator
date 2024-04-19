@@ -1,11 +1,10 @@
 import sharp from "sharp";
 import TextToSVG from "text-to-svg";
 import SVGToJpeg from "convert-svg-to-jpeg";
-import AWS from "aws-sdk";
+import { S3Client, PutObjectCommand } from ("@aws-sdk/client-s3");
 import fs from "fs";
 
-const readFile = promisify(fs.readFile);
-const s3 = new AWS.S3();
+const s3 = new AWS.S3Client({ region: "us-east-1" });
 
 async function addTextToImage(
   imagePath,
@@ -48,7 +47,7 @@ async function addTextToImage(
 
     console.log("Image saved with text:", outputPath);
     // Read the output file into a buffer
-    const fileContent = await readFile(outputPath);
+    const fileStream = fs.createReadStream(filePath);
 
     // Upload the buffer to S3
     const params = {
@@ -57,7 +56,12 @@ async function addTextToImage(
       Body: fileContent,
     };
 
-    await s3.upload(params).promise();
+    try {
+      const data = await s3.send(new PutObjectCommand(params));
+      console.log("File uploaded successfully. Location:", data.Location);
+  } catch (err) {
+      console.log("Error", err);
+  }
 
     console.log("Image uploaded to S3");
   } catch (error) {
