@@ -33,7 +33,6 @@ async function uploadToS3(bucketName, filename, body) {
 async function addTextToImage(
   imagePath,
   text,
-  outputPath,
   fontPath,
   progressPercentage
 ) {
@@ -67,23 +66,21 @@ async function addTextToImage(
           left: 860,
         },
       ])
-      .toFile(outputPath);
+      .toBuffer(); // Convert the processed image to a buffer instead of saving it to a file
 
-    console.log("Image saved with text:", outputPath);
-    return "File uploaded successfully";
+    return result;
   } catch (error) {
-    return error.toString();
+    throw error;
   }
 }
 
 const imagePath = "banner.jpeg";
 const fontPath = "Arial.ttf";
 
-
-for (let i = 1; i <= 10000; i++) {
+for (let i = 5118; i <= 7001; i++) {
   const text = `${i} subscribers to go!`;
-  const outputPath = `banner_${i}.jpg`;
-  await addTextToImage(imagePath, text, outputPath, fontPath, 40);
-  const data = await uploadToS3("lukej-banners", outputPath, fs.createReadStream(outputPath));
-  console.log(`File uploaded successfully: ${data.Location}`);
+  const outputFilename = `banner_${i}.jpg`;
+  const processedImage = await addTextToImage(imagePath, text, fontPath, ((8900-i)/8900)*100);
+  await uploadToS3("lukej-banners", outputFilename, processedImage);
+  console.log(`File uploaded successfully: ${i}`);
 }
