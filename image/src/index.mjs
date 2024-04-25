@@ -1,6 +1,6 @@
 import sharp from "sharp";
-import TextToSVG from "text-to-svg";
-import SVGToJpeg from "convert-svg-to-jpeg";
+// import TextToSVG from "text-to-svg";
+// import SVGToJpeg from "convert-svg-to-jpeg";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 
@@ -14,35 +14,35 @@ async function addTextToImage(
   progressPercentage
 ) {
   try {
-    const textToSVG = TextToSVG.loadSync(fontPath);
-    const svgText = textToSVG.getSVG(text, {
-      x: 0,
-      y: 0,
-      fontSize: 48,
-      anchor: "top",
-      attributes: { fill: "white" },
-    });
+    // const textToSVG = TextToSVG.loadSync(fontPath);
+    // const svgText = textToSVG.getSVG(text, {
+    //   x: 0,
+    //   y: 0,
+    //   fontSize: 48,
+    //   anchor: "top",
+    //   attributes: { fill: "white" },
+    // });
 
     const image = sharp(imagePath);
 
-    const progressBarHeight = 80;
-    const progressBarWidth = 1050;
-    const filledWidth = progressBarWidth * (progressPercentage / 100);
-    const rxry = 0; // border radius
+    // const progressBarHeight = 80;
+    // const progressBarWidth = 1050;
+    // const filledWidth = progressBarWidth * (progressPercentage / 100);
+    // const rxry = 0; // border radius
 
-    const progressBarEmptySVG = `<rect width="${progressBarWidth}" height="${progressBarHeight}" fill="white" rx="${rxry}" ry="${rxry}"/>`;
-    const progressBarFilledSVG = `<rect width="${filledWidth}" height="${progressBarHeight}" fill="#88DF68" rx="${rxry}" ry="${rxry}"/>`;
-    const progressBarSVG = `<svg width="${progressBarWidth}" height="${progressBarHeight}">${progressBarEmptySVG}${progressBarFilledSVG}</svg>`;
-    const progressBarJpeg = await SVGToJpeg.convert(progressBarSVG);
+    // const progressBarEmptySVG = `<rect width="${progressBarWidth}" height="${progressBarHeight}" fill="white" rx="${rxry}" ry="${rxry}"/>`;
+    // const progressBarFilledSVG = `<rect width="${filledWidth}" height="${progressBarHeight}" fill="#88DF68" rx="${rxry}" ry="${rxry}"/>`;
+    // const progressBarSVG = `<svg width="${progressBarWidth}" height="${progressBarHeight}">${progressBarEmptySVG}${progressBarFilledSVG}</svg>`;
+    // const progressBarJpeg = await SVGToJpeg.convert(progressBarSVG);
     const result = await image
-      .composite([
-        { input: Buffer.from(progressBarJpeg), top: 700, left: 582 },
-        {
-          input: Buffer.from(svgText),
-          top: 800,
-          left: 860,
-        },
-      ])
+      // .composite([
+      //   { input: Buffer.from(progressBarJpeg), top: 700, left: 582 },
+      //   {
+      //     input: Buffer.from(svgText),
+      //     top: 800,
+      //     left: 860,
+      //   },
+      // ])
       .toFile(outputPath);
 
     console.log("Image saved with text:", outputPath);
