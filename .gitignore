@@ -5,3 +5,4 @@ local_instructions.md
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+image/src/.env.local
